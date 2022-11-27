@@ -6,6 +6,8 @@ board = np.chararray((8, 8), itemsize=2, unicode=True)
 for i in range(len(l)):
     for j in range(len(l)):
         board[j][i] = f'{l[i]}{j+1}'
+        
+#print(board)
 
 def is_under_queen_attack(position, queen_position):
     if type(position) != str:
@@ -23,8 +25,9 @@ def is_under_queen_attack(position, queen_position):
     
     if (position[0] == queen_position[0]) or (position[1] == queen_position[1]):
         return True
-    
-    if abs(position[0] - queen_position[0]) == abs(position[1] - queen_position[1]):
+
+    queen_pos_let, queen_pos_num = np.where(board == queen_position) # get queen board position (returns [row], [col] indexes in the ndarray board)
+    if position in np.diag(board, k=(queen_pos_num[0] - queen_pos_let[0])):
         return True
     
     return False
@@ -69,3 +72,4 @@ def test_attack_diagonal():
 
 def test_no_attack():
     assert not is_under_queen_attack("c4", "e5")
+    
